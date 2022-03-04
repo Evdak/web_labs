@@ -3,6 +3,7 @@
 
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <title>Amazeriffic</title>
     <style>
         header {
@@ -83,6 +84,46 @@
             list-style: none;
             columns: 2;
         }
+
+
+        .tabs a span {
+            display: inline-block;
+            border-radius: 5px 5px 0 0;
+            width: 100px;
+            margin-right: 10px;
+            text-align: center;
+            background: #ddd;
+            padding: 5px;
+        }
+
+        .tabs a span.active {
+            background: #eee;
+        }
+
+        .input-task {
+            border-radius: 25px;
+            height: 10%;
+            width: 20%;
+            margin: 1%;
+        }
+
+        .add-task-btn {
+            background-color: #4CAF50;
+            border-radius: 25px;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 5px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 14px;
+        }
+
+        .result-alert {
+            margin: 1%;
+            font-size: 16px;
+        }
     </style>
 </head>
 
@@ -113,7 +154,24 @@
                 <img src="lightbulb.png" alt="Изображение лампочки">
             </div>
         </div>
+        <div class="container-tasks">
+            <div class="tabs">
+                <a href="#"><span class="active">Новые</span></a>
+                <a href="#"><span>Старые</span></a>
+                <a href="#"><span>Добавить</span></a>
+            </div>
+            <div class="content-tasks">
+                <ul>
+                    <!-- <li>Купить продукты</li>
+                    <li>Обновить несколько новых задач</li>
+                    <li>Подготовиться к лекции в понедельник</li>
+                    <li>Ответить на письма нанимателей в LinkedIn</li>
+                    <li>Вывести Грейси на прогулку в парк</li>
+                    <li>Закончить писать книгу</li> -->
+                </ul>
 
+            </div>
+        </div>
     </main>
     <footer>
         <div class="contact">
@@ -132,8 +190,54 @@
                 <li><a href="faq.html">ВиО</a></li>
                 <li><a href="#">Вакансии</a></li>
             </ul>
+
         </div>
     </footer>
+    <script>
+
+        var main = function () {
+            var toDos = [
+                "Закончить писать эту книгу",
+                "Вывести Грейси на прогулку в парк", "Ответить на электронные письма", "Подготовиться к лекции в понедельник", "Обновить несколько новых задач", "Купить продукты"
+            ];
+            $(".tabs a span").toArray().forEach(function (element) {
+                $(element).on("click", function () {
+                    var $element = $(element),
+                        $content;
+                    console.log($element);
+                    $(".tabs a span").removeClass("active");
+                    $element.addClass("active");
+                    $("main .content-tasks").empty();
+                    if ($element.parent().is(":nth-child(1)")) {
+                        console.log("Щелчок на первой вкладке!");
+                        $content = $("<ul>");
+                        for (i = toDos.length - 1; i > -1; i--) {
+                            $content.append($("<li>").text(toDos[i]));
+                        }
+                        $("main .content-tasks").append($content);
+                    } else if ($element.parent().is(":nth-child(2)")) {
+                        $content = $("<ul>");
+                        toDos.forEach(function (todo) {
+                            $content.append($("<li>").text(todo));
+                        });
+                        $("main .content-tasks").append($content);
+                    } else if ($element.parent().is(":nth-child(3)")) {
+                        console.log("Щелчок на третьей вкладке!");
+                        $('.content-tasks').append('<div class="add-task"><input type="text" class="input-task"><button class="add-task-btn">Добавить</button></div>')
+                        $(".add-task-btn").click(function () {
+                            toDos.push($(".input-task").val());
+                            $('.content-tasks').append('<p class="result-alert">Добавлено!</p>');
+                            $(".input-task").val("");
+                        })
+                    }
+                })
+                return false;
+            });
+            // });
+            $(".tabs a:first-child span").trigger("click");
+        };
+        main();
+    </script>
 </body>
 
 </html>
