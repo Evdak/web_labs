@@ -14,7 +14,7 @@
         <h1><a href="index.html">Amazeriffic</a></h1>
         <nav>
             <a href="#">Регистрация</a> | <a href="faq.html">ВиО</a> |
-            <a href="#">Техподдержка</a>
+            <a href="#">Техподдержка</a> | <a href="flikr.html">Flikr</a>
         </nav>
     </header>
     <hr>
@@ -145,17 +145,26 @@
                             <input type="text" class="input-task-tags" placeholder="Тэги (через запятую)">
                             <button class="add-task-btn">Добавить</button>
                         </div>`);
+                        $(".input-task, .input-task-tags").keyup(function (event) {
+                            if (event.keyCode === 13) {
+                                $(".add-task-btn").click();
+                            }
+                        });
                         $(".add-task-btn").click(function () {
                             var description = $(".input-task").val();
-                            toDos.push(description);
-                            console.log(typeof (toDoObjects));
                             var tags = $(".input-task-tags").val();
+                            if (!description || !tags) {
+                                alert("Ошибка, пустые поля ввода");
+                                return
+                            }
+                            toDos.push(description);
                             tags = tags.split(',');
                             tags = tags.map((tag) => tag.trim());
                             toDoObjects.push({ "description": description, "tags": tags });
                             console.log(toDoObjects);
                             $('.content-tasks').append('<p class="result-alert">Добавлено!</p>');
                             $(".input-task").val("");
+                            $(".input-task-tags").val("");
                         })
                     } else if ($element.parent().is(":nth-child(3)")) { // ЭТО КОД ДЛЯ ВКЛАДКИ ТЕГИ 
                         console.log("Щелчок на вкладке Теги");
