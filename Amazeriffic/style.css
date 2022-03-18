@@ -1,0 +1,119 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: stretch;
+    align-content: center;
+}
+
+header a {
+    color: black;
+}
+
+header h1 {
+    margin-left: 2%;
+}
+
+header h1 a {
+    font-style: italic;
+    text-decoration: none;
+    color: black;
+}
+
+main .main {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: stretch;
+    align-content: center;
+    margin-left: 2%;
+}
+
+main .main .main-text {
+    width: 50%;
+}
+
+main .main .main-img {
+    margin: 3% 10%;
+}
+
+main .main .main-img img {
+    width: 70%;
+}
+
+main .main .main-text ul {
+    padding-left: 2%;
+}
+
+main .main .main-text p {
+    font-style: italic;
+}
+
+
+footer {
+    background-color: #e0e0e0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    justify-items: stretch;
+    align-content: center;
+    padding: 2% 5%;
+}
+
+footer .contact {
+    line-height: 10%;
+}
+
+footer .sitemap {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    margin-right: 5%;
+}
+
+footer .sitemap ul {
+    list-style: none;
+    columns: 2;
+}
+
+
+.tabs a span {
+    display: inline-block;
+    border-radius: 5px 5px 0 0;
+    width: 100px;
+    margin-right: 10px;
+    text-align: center;
+    background: #ddd;
+    padding: 5px;
+}
+
+.tabs a span.active {
+    background: #eee;
+}
+
+.input-task, .input-task-tags {
+    border-radius: 25px;
+    height: 10%;
+    width: 20%;
+    margin: 1%;
+}
+
+
+.add-task-btn {
+    background-color: #4CAF50;
+    border-radius: 25px;
+    /* Green */
+    border: none;
+    color: white;
+    padding: 5px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 14px;
+}
+
+.result-alert {
+    margin: 1%;
+    font-size: 16px;
+}
