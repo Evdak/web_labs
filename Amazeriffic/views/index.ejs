@@ -198,7 +198,7 @@
         //     // });
         // });
         $(document).ready(function () {
-            $.getJSON("../todo.json", function (toDoObjects) {
+            $.getJSON("/todo.json", function (toDoObjects) {
                 // вызываем функцию main с задачами в качестве аргумента
                 main(toDoObjects);
                 $(".tabs a:first-child span").trigger("click");
