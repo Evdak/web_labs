@@ -4,9 +4,9 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script type="text/javascript" src="todo.json"></script>
+    <!-- <script type="text/javascript" src="todo.json"></script> -->
     <title>Amazeriffic</title>
-    <link type="text/css" href="style.css" rel="stylesheet">
+    <link type="text/css" href="css/style.css" rel="stylesheet">
 </head>
 
 <body>
@@ -14,7 +14,7 @@
         <h1><a href="index.html">Amazeriffic</a></h1>
         <nav>
             <a href="#">Регистрация</a> | <a href="faq.html">ВиО</a> |
-            <a href="#">Техподдержка</a> | <a href="flikr.html">Flikr</a>
+            <a href="#">Техподдержка</a> | <a href="flikr">Flikr</a>
         </nav>
     </header>
     <hr>
@@ -33,7 +33,7 @@
                 </ul>
             </div>
             <div class="main-img">
-                <img src="lightbulb.png" alt="Изображение лампочки">
+                <img src="img/lightbulb.png" alt="Изображение лампочки">
             </div>
         </div>
         <div class="container-tasks">
@@ -113,6 +113,7 @@
         }
 
         var main = function (toDoObjects) {
+            console.log('OK');
             var toDos = [
                 "Закончить писать эту книгу",
                 "Вывести Грейси на прогулку в парк", "Ответить на электронные письма", "Подготовиться к лекции в понедельник", "Обновить несколько новых задач", "Купить продукты"
@@ -186,15 +187,22 @@
 
 
 
-        $(document).ready(function () {
-            var toDoObjects = JSON.parse(todo);
-            main(toDoObjects);
-            $(".tabs a:first-child span").trigger("click");
+        // $(document).ready(function () {
+        //     var toDoObjects = JSON.parse(todo);
+        //     main(toDoObjects);
+        //     $(".tabs a:first-child span").trigger("click");
 
-            // $.getJSON("todo.json", function (toDoObjects) {
-            //     main(toDoObjects);
-            //     // вызываем функцию main с задачами в качестве аргумента main(toDoObjects);
-            // });
+        //     // $.getJSON("todo.json", function (toDoObjects) {
+        //     //     main(toDoObjects);
+        //     //     // вызываем функцию main с задачами в качестве аргумента main(toDoObjects);
+        //     // });
+        // });
+        $(document).ready(function () {
+            $.getJSON("../todo.json", function (toDoObjects) {
+                // вызываем функцию main с задачами в качестве аргумента
+                main(toDoObjects);
+                $(".tabs a:first-child span").trigger("click");
+            });
         });
 
     </script>
