@@ -1,0 +1,203 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script type="text/javascript" src="todo.json"></script>
+    <title>Amazeriffic</title>
+    <link type="text/css" href="style.css" rel="stylesheet">
+</head>
+
+<body>
+    <header>
+        <h1><a href="index.html">Amazeriffic</a></h1>
+        <nav>
+            <a href="#">Регистрация</a> | <a href="faq.html">ВиО</a> |
+            <a href="#">Техподдержка</a> | <a href="flikr.html">Flikr</a>
+        </nav>
+    </header>
+    <hr>
+    <main>
+        <div class="main">
+            <div class="main-text">
+                <h2>Amazeriffic изменит вашу жизнь!</h2>
+                <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore
+                    et
+                    dolore magna aliqua.</p>
+                <h3>Почему вам нужен Amazeriffic?</h3>
+                <ul>
+                    <li>Он легко впишется в вашу жизнь</li>
+                    <li>Он классный</li>
+                    <li>Он перевернет ваш мир</li>
+                </ul>
+            </div>
+            <div class="main-img">
+                <img src="lightbulb.png" alt="Изображение лампочки">
+            </div>
+        </div>
+        <div class="container-tasks">
+            <div class="tabs">
+                <a href="#"><span class="active">Новые</span></a>
+                <a href="#"><span>Старые</span></a>
+                <a href="#"><span>Теги</span></a>
+                <a href="#"><span>Добавить</span></a>
+            </div>
+            <div class="content-tasks">
+                <ul>
+                    <!-- <li>Купить продукты</li>
+                    <li>Обновить несколько новых задач</li>
+                    <li>Подготовиться к лекции в понедельник</li>
+                    <li>Ответить на письма нанимателей в LinkedIn</li>
+                    <li>Вывести Грейси на прогулку в парк</li>
+                    <li>Закончить писать книгу</li> -->
+                </ul>
+
+            </div>
+        </div>
+    </main>
+    <footer>
+        <div class="contact">
+            <h4>Свяжитесь с нами</h4>
+            <p>Amazeriffic!</p>
+            <p>555 50-я улица</p>
+            <p>Татарстан, Казань 28801</p>
+        </div>
+        <div class="sitemap">
+            <h4>Карта сайта</h4>
+            <ul>
+                <li><a href="index.html">Домой</a></li>
+                <li><a href="#">О нас</a></li>
+                <li><a href="#">Право</a></li>
+                <li><a href="#">Техподдержка</a></li>
+                <li><a href="faq.html">ВиО</a></li>
+                <li><a href="#">Вакансии</a></li>
+            </ul>
+
+        </div>
+    </footer>
+    <script>
+        function organizeByTag(toDoObjects) {
+            var result = [];
+            toDoObjects.forEach(function (element) {
+                element.tags.forEach(function (tag) {
+                    var check = true;
+                    result.forEach(function (js) {
+                        if (js.name === tag) {
+                            check = false;
+                        }
+                    });
+                    if (check) {
+                        result.push({ "name": tag, "toDos": [] });
+                    }
+                    result.forEach(function (js) {
+                        if (js.name == tag) {
+                            js.toDos.push(element.description);
+                        }
+                    });
+                });
+            });
+            console.log(result);
+            return result;
+        }
+
+        function getToDos(toDoObjects) {
+            var result = [];
+            toDoObjects.forEach(function (element) {
+
+                result.push(element.description);
+                return result;
+            });
+            console.log(result);
+            return result;
+        }
+
+        var main = function (toDoObjects) {
+            var toDos = [
+                "Закончить писать эту книгу",
+                "Вывести Грейси на прогулку в парк", "Ответить на электронные письма", "Подготовиться к лекции в понедельник", "Обновить несколько новых задач", "Купить продукты"
+            ];
+            toDos = getToDos(toDoObjects);
+            $(".tabs a span").toArray().forEach(function (element) {
+                $(element).on("click", function () {
+                    var $element = $(element),
+                        $content;
+                    $(".tabs a span").removeClass("active");
+                    $element.addClass("active");
+                    $("main .content-tasks").empty();
+                    if ($element.parent().is(":nth-child(1)")) {
+                        $content = $("<ul>");
+                        for (i = toDos.length - 1; i > -1; i--) {
+                            $content.append($("<li>").text(toDos[i]));
+                        }
+                        $("main .content-tasks").append($content);
+                    } else if ($element.parent().is(":nth-child(2)")) {
+                        $content = $("<ul>");
+                        toDos.forEach(function (todo) {
+                            $content.append($("<li>").text(todo));
+                        });
+                        $("main .content-tasks").append($content);
+                    } else if ($element.parent().is(":nth-child(4)")) {
+                        $('.content-tasks').append(`
+                        <div class="add-task">
+                            <input type="text" class="input-task" placeholder="Описание">
+                            <br>
+                            <input type="text" class="input-task-tags" placeholder="Тэги (через запятую)">
+                            <button class="add-task-btn">Добавить</button>
+                        </div>`);
+                        $(".input-task, .input-task-tags").keyup(function (event) {
+                            if (event.keyCode === 13) {
+                                $(".add-task-btn").click();
+                            }
+                        });
+                        $(".add-task-btn").click(function () {
+                            var description = $(".input-task").val();
+                            var tags = $(".input-task-tags").val();
+                            if (!description || !tags) {
+                                alert("Ошибка, пустые поля ввода");
+                                return
+                            }
+                            toDos.push(description);
+                            tags = tags.split(',');
+                            tags = tags.map((tag) => tag.trim());
+                            toDoObjects.push({ "description": description, "tags": tags });
+                            console.log(toDoObjects);
+                            $('.content-tasks').append('<p class="result-alert">Добавлено!</p>');
+                            $(".input-task").val("");
+                            $(".input-task-tags").val("");
+                        })
+                    } else if ($element.parent().is(":nth-child(3)")) { // ЭТО КОД ДЛЯ ВКЛАДКИ ТЕГИ 
+                        console.log("Щелчок на вкладке Теги");
+                        var organizedByTag = organizeByTag(toDoObjects);
+                        organizedByTag.forEach(function (tag) {
+                            var $tagName = $("<h3>").text(tag.name);
+                            var $content = $("<ul>");
+                            tag.toDos.forEach(function (description) {
+                                var $li = $("<li>").text(description); $content.append($li);
+                            });
+                            $("main .content-tasks").append($tagName);
+                            $("main .content-tasks").append($content);
+                        });
+                    }
+                });
+                // return false;
+            });
+        }
+
+
+
+        $(document).ready(function () {
+            var toDoObjects = JSON.parse(todo);
+            main(toDoObjects);
+            $(".tabs a:first-child span").trigger("click");
+
+            // $.getJSON("todo.json", function (toDoObjects) {
+            //     main(toDoObjects);
+            //     // вызываем функцию main с задачами в качестве аргумента main(toDoObjects);
+            // });
+        });
+
+    </script>
+</body>
+
+</html>
