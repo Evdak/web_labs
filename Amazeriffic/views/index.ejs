@@ -114,11 +114,7 @@
 
         var main = function (toDoObjects) {
             console.log('OK');
-            var toDos = [
-                "Закончить писать эту книгу",
-                "Вывести Грейси на прогулку в парк", "Ответить на электронные письма", "Подготовиться к лекции в понедельник", "Обновить несколько новых задач", "Купить продукты"
-            ];
-            toDos = getToDos(toDoObjects);
+            var toDos = getToDos(toDoObjects);
             $(".tabs a span").toArray().forEach(function (element) {
                 $(element).on("click", function () {
                     var $element = $(element),
@@ -161,7 +157,11 @@
                             toDos.push(description);
                             tags = tags.split(',');
                             tags = tags.map((tag) => tag.trim());
-                            toDoObjects.push({ "description": description, "tags": tags });
+                            // toDoObjects.push({ "description": description, "tags": tags });
+                            newToDo = { "description": description, "tags": tags };
+                            $.post("/todos", newToDo, function (result) {
+                                toDoObjects.push({ "description": description, "tags": tags });
+                            });
                             console.log(toDoObjects);
                             $('.content-tasks').append('<p class="result-alert">Добавлено!</p>');
                             $(".input-task").val("");
