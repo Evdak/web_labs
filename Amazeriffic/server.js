@@ -15,10 +15,25 @@ app.use(express.json())
 var mongoose = require("mongoose");
 mongoose.connect('mongodb://localhost:27017/amazeriffic');
 
+var usersController = require("./controllers/users_controller.js");
+const User = require('./models/user.js');
+
+app.get("/users.json", usersController.index);
+app.post("/users", usersController.create);
+app.get("/users/:username", usersController.show);
+app.put("/users/:username", usersController.update);
+app.delete("/users/:username", usersController.destroy);
+app.get("/users/:username/account", usersController.showTodos);
+// app.put("/users/:username/account", usersController.updateTodos);
+// app.delete("/users/:username/account", usersController.destroyTodos);
+
+
+var ObjectId = mongoose.Schema.Types.ObjectId;
 
 const ToDoSchema = mongoose.Schema({
     description: String,
-    tags: [String]
+    tags: [String],
+    owner: { type: ObjectId, ref: "User" }
 });
 
 var ToDo = mongoose.model("ToDo", ToDoSchema);
@@ -29,42 +44,54 @@ app.set('views', './views')
 app.set('view engine', 'ejs')
 
 app.get('', (req, res) => {
-    res.render('index')
+    res.render('index', { username: "" });
 })
 app.get('/flikr', (req, res) => {
     res.render('flikr')
 })
 
-app.get('/todo.json', (req, res) => {
+app.get('/:username/todo.json', (req, res) => {
     // res.sendFile(__dirname + '/todo.json')
-    ToDo.find({}, function (err, toDos) {
-        if (err !== null) {
-            console.log(err);
-            res.send("ERROR");
-        } else {
-            res.json(toDos);
-        }
+    User.find({ 'username': req.params.username }, function (err, user) {
+        console.log('нашел', user[0]._id)
+        ToDo.find({ 'owner': user[0]._id }, function (err, toDos) {
+            if (err !== null) {
+                console.log(err);
+                res.send("ERROR");
+            } else {
+                res.json(toDos);
+            }
+        });
     });
 });
 
-app.post("/todos", function (req, res) {
+app.get('/login', (req, res) => {
+    res.render('login');
+});
+
+app.get('/register', (req, res) => {
+    res.render('register');
+});
+
+app.post("/:username/todos", function (req, res) {
     console.log(req.body);
-    var newToDo = new ToDo({ "description": req.body.description, "tags": req.body.tags });
-    newToDo.save(function (err, result) {
-        if (err !== null) {
-            console.log(err);
-            res.send("ERROR");
-        } else {
-            // клиент ожидает, что будут возвращены все задачи,
-            // поэтому для сохранения совместимости сделаем дополнитель) в папку part7 . Нам понадобится файл package.json , гденый запрос 
-            ToDo.find({}, function (err, result) {
-                if (err !== null) {
-                    // элемент не был сохранен
-                    res.send("ERROR");
-                }
-                res.json(result);
-            });
-        }
+
+    User.find({ 'username': req.params.username }, function (err, user) {
+        var newToDo = new ToDo({ 'owner': user[0]._id, "description": req.body.description, "tags": req.body.tags });
+        newToDo.save(function (err, result) {
+            if (err !== null) {
+                console.log(err);
+                res.send("ERROR");
+            } else {
+                ToDo.find({}, function (err, result) {
+                    if (err !== null) {
+                        // элемент не был сохранен
+                        res.send("ERROR");
+                    }
+                    res.json(result);
+                });
+            }
+        });
     });
 });
 

@@ -6,15 +6,16 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- <script type="text/javascript" src="todo.json"></script> -->
     <title>Amazeriffic</title>
-    <link type="text/css" href="css/style.css" rel="stylesheet">
+    <!-- <base href="/"> -->
+    <link type="text/css" href="../../css/style.css" rel="stylesheet">
 </head>
 
 <body>
     <header>
-        <h1><a href="index.html">Amazeriffic</a></h1>
+        <h1><a href="/">Amazeriffic</a></h1>
         <nav>
-            <a href="#">Регистрация</a> | <a href="faq.html">ВиО</a> |
-            <a href="#">Техподдержка</a> | <a href="flikr">Flikr</a>
+            <a href="/register">Регистрация</a> | <a href="/login">Вход</a> | <a href="/account">Личный кабинет</a> |
+            <a href="faq.html">ВиО</a> | <a href="flikr">Flikr</a>
         </nav>
     </header>
     <hr>
@@ -33,7 +34,7 @@
                 </ul>
             </div>
             <div class="main-img">
-                <img src="img/lightbulb.png" alt="Изображение лампочки">
+                <img src="../../img/lightbulb.png" alt="Изображение лампочки">
             </div>
         </div>
         <div class="container-tasks">
@@ -112,7 +113,7 @@
             return result;
         }
 
-        var main = function (toDoObjects) {
+        var main = function (toDoObjects, username) {
             console.log('OK');
             var toDos = getToDos(toDoObjects);
             $(".tabs a span").toArray().forEach(function (element) {
@@ -159,7 +160,7 @@
                             tags = tags.map((tag) => tag.trim());
                             // toDoObjects.push({ "description": description, "tags": tags });
                             newToDo = { "description": description, "tags": tags };
-                            $.post("/todos", newToDo, function (result) {
+                            $.post(`/${username}/todos`, newToDo, function (result) {
                                 toDoObjects.push({ "description": description, "tags": tags });
                             });
                             console.log(toDoObjects);
@@ -198,11 +199,15 @@
         //     // });
         // });
         $(document).ready(function () {
-            $.getJSON("/todo.json", function (toDoObjects) {
-                // вызываем функцию main с задачами в качестве аргумента
-                main(toDoObjects);
-                $(".tabs a:first-child span").trigger("click");
-            });
+            var username = "<%= username %>";
+
+            if (username != "") {
+                $.getJSON("/<%= username %>/todo.json", function (toDoObjects) {
+                    // вызываем функцию main с задачами в качестве аргумента
+                    main(toDoObjects, username);
+                    $(".tabs a:first-child span").trigger("click");
+                });
+            }
         });
 
     </script>

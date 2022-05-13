@@ -1,0 +1,105 @@
+<html>
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <script>
+        $.getJSON('/users.json', function (users) {
+            console.log(users);
+            var i = 1;
+            var table = $('table tbody')
+            users.forEach(element => {
+                var row = $(`
+                    <tr id='${i}'>
+                        <th scope="row">${i++}</th>
+                        <td class="inputUsername" old="${element.username}"><input type='text' value="${element.username}"></td>
+                        <td class="inputRole"><input type='text' value="${element.role}"></td>
+                        <td><a href="/${element.username}/todos.json"></a></td>
+                    </tr>
+                `)
+                table.append(row);
+            });
+            table.append(`<button type="button" class="btn btn-outline-primary m-2"
+                    onclick="save()">Сохранить</button>`)
+
+        });
+        function save() {
+            var rows = $('tr').toArray();
+            rows.shift();
+            rows.forEach(element => {
+                var $inputUsername = $(element).find(".inputUsername input");
+                var $inputRole = $(element).find(".inputRole input");
+                if ($inputUsername.val() !== null
+                    && $inputUsername.val().trim() !== ""
+                    && $inputRole.val() !== null
+                    && $inputRole.val().trim() !== ""
+                ) {
+                    var username = $inputUsername.val();
+                    var role = $inputRole.val();
+                    var oldUsername = $(element).find(".inputUsername").attr("old");
+                    console.log(username, role, oldUsername)
+                    if (username !== null && username.trim() !== ""
+                        && role !== null && role.trim() !== "") {
+                        $.ajax({
+                            'url': '/users/' + username,
+                            'type': 'PUT',
+                            'data': { 'oldUsername': oldUsername, 'newUsername': username, 'role': role }
+                        }).done(function (responde) {
+                            console.log(responde);
+                            $inputUsername.val(username);
+                            $inputRole.val(role);
+                            console.log('Пользователь успешно изменен');
+                        }).fail(function (jqXHR, textStatus, error) {
+                            console.log(error);
+                            alert("Ошибка!" + jqXHR.status + " " + jqXHR.textStatus);
+                        });
+                    }
+                }
+                else
+                    alert("Ошибка, проверьте правильность ввода");
+            })
+
+        }
+
+    </script>
+</head>
+
+<body>
+    <div class="container">
+        <header
+            class="d-flex flex-wrap align-items-center justify-content-center justify-content-md-between py-3 mb-4 border-bottom">
+
+            <ul class="nav col-12 col-md-auto mb-2 justify-content-center mb-md-0">
+                <li><a href="/" class="nav-link px-2 link-dark">Главная</a></li>
+
+            </ul>
+
+            <!-- <div class="col-md-3 text-end">
+                <button type="button" class="btn btn-outline-primary me-2"
+                    onclick="location.href = '/login'">Вход</button>
+                <button type="button" class="btn btn-primary" onclick="location.href = '/register'">Регистрация</button>
+            </div> -->
+        </header>
+    </div>
+    <main>
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Username</th>
+                    <th scope="col">Role</th>
+                </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+        </table>
+    </main>
+
+
+</body>
+
+</html>
